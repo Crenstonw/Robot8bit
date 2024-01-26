@@ -1,4 +1,5 @@
 import pygame
+from assets import Assets
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 736)) #40x23 casillas a 16 bits
@@ -8,12 +9,12 @@ dt = 0
 
 #Carga de sprites
 sprite_width, sprite_height = 32, 32
-sprite_image = pygame.image.load("assets/wall.png")
-character_image = pygame.image.load("assets/character.png")
+sprite_image = pygame.image.load(Assets.character)
+character_image = pygame.image.load(Assets.wall)
 
-background_array = [[sprite_image for _ in range(23)] for _ in range(40)]
+background_array = [[sprite_image for _ in range(22)] for _ in range(40)]
 
-player_pos = pygame.Vector2(16, 16)
+player_pos = pygame.Vector2(0, 0)
 player_radius = 16
 cell_size = 32
 delay_time = 200
@@ -23,20 +24,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    for col in range(23):
+    screen.fill("white")
+    for col in range(22):
         for row in range(40):
             x, y = row * sprite_width, col * sprite_height
             screen.blit(background_array[row][col], (x, y))
 
     #pygame.draw.line(color="white", start_pos= (0, 32), end_pos= (0, 720), width= )
 
-    pygame.transform.scale(character_image, (32, 32))
+    screen.blit(character_image, (player_pos))
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP] and player_pos.y > player_radius * 2:
         player_pos.y -= 32
         pygame.time.delay(delay_time)
-    if keys[pygame.K_DOWN] and player_pos.y < (screen.get_height() - (player_radius * 2)):
+    if keys[pygame.K_DOWN] and player_pos.y < ((screen.get_height()-32) - (player_radius * 2)):
         player_pos.y += 32
         pygame.time.delay(delay_time)
     if keys[pygame.K_LEFT] and player_pos.x > player_radius * 2:
