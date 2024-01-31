@@ -1,55 +1,69 @@
-import pygame
-from assets import Assets
+# import pygame
+# from assets import Assets
+from sprites import *
+from config import *
+from Character.MapLoader import *
+import sys
 
-pygame.init()
-screen = pygame.display.set_mode((1280, 736)) #40x23 casillas a 16 bits
-clock = pygame.time.Clock()
-running = True
-dt = 0
 
-#Carga de sprites
-sprite_width, sprite_height = 32, 32
-sprite_image = pygame.image.load(Assets.character)
-character_image = pygame.image.load(Assets.wall)
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((win_width, win_height))
+        self.clock = pygame.time.Clock()
+        self.running = True
+        # self.font = pygame.font.Font('Arial', 32)
 
-background_array = [[sprite_image for _ in range(22)] for _ in range(40)]
+    def createTileMap(self):
+        ml = MapLoader()
+        for line in enumerate(ml.lines):
+            blocks = line.split()
 
-player_pos = pygame.Vector2(0, 0)
-player_radius = 16
-cell_size = 32
-delay_time = 200
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    def new(self):
+        self.playing = True
+        self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.blocks = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.LayeredUpdates()
+        self.atacks = pygame.sprite.LayeredUpdates()
 
-    screen.fill("white")
-    for col in range(22):
-        for row in range(40):
-            x, y = row * sprite_width, col * sprite_height
-            screen.blit(background_array[row][col], (x, y))
+        self.player = Player(self, 1, 2)
 
-    #pygame.draw.line(color="white", start_pos= (0, 32), end_pos= (0, 720), width= )
 
-    screen.blit(character_image, (player_pos))
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP] and player_pos.y > player_radius * 2:
-        player_pos.y -= 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_DOWN] and player_pos.y < ((screen.get_height()-32) - (player_radius * 2)):
-        player_pos.y += 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_LEFT] and player_pos.x > player_radius * 2:
-        player_pos.x -= 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_RIGHT] and player_pos.x < (screen.get_width() - (player_radius * 2)):
-        player_pos.x += 32
-        pygame.time.delay(delay_time)
+    def update(self):
+        self.all_sprites.update()
 
-    pygame.display.flip()
+    def draw(self):
+        self.screen.fill("black")
+        self.all_sprites.draw(self.screen)
+        self.clock.tick(FPS)
+        pygame.display.update()
 
-    dt = clock.tick(120) / 1000
+    def main(self):
+        while self.playing:
+            self.events()
+            self.update()
+            self.draw()
+        self.running = False
 
+    def game_over(self):
+        pass
+
+    def intro_screen(self):
+        pass
+
+
+g = Game()
+g.intro_screen()
+g.new()
+while g.running:
+    g.main()
+    g.game_over()
 pygame.quit()
+sys.exit()

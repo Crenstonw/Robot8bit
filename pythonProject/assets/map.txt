@@ -1,22 +1,22 @@
 B:7,D:7,P:2,T:1
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-M                       AAAAAAA        M
-M         M             AAAAAAA        M
-M         M             AAAAAAA        M
-M         M             AAAAAAA        M
-M         M             AAAAAAA        M
-M         M                            M
-M         M                            M
-MMMMMMMMMMMM       MMMMMMMMMMMMMMMMMMMMM
-M          M         M                 M
-M          M         M                 M
-M   MMMMMMMM         M                 M
-M          A         M                 M
-M          A         M                 M
-M          A         M      MMMMMMMMMMMM
-M          A         M                 M
-M          A         M                 M
-M          A         M                 M
-M          A         M                 M
-M          A                           M
+M.......................AAAAAAA........M
+M...P.....M.............AAAAAAA........M
+M.........M.............AAAAAAA........M
+M.........M.............AAAAAAA........M
+M.........M.............AAAAAAA........M
+M.........M............................M
+M.........M............................M
+MMMMMMMMMMMM.......MMMMMMMMMMMMMMMMMMMMM
+M..........M.........M.................M
+M..........M.........M.................M
+M...MMMMMMMM.........M.................M
+M..........A.........M.................M
+M..........A.........M.................M
+M..........A.........M......MMMMMMMMMMMM
+M..........A.........M.................M
+M..........A.........M.................M
+M..........A.........M.................M
+M..........A.........M.................M
+M..........A...........................M
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
