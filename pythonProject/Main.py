@@ -1,55 +1,130 @@
 import pygame
-from assets import Assets
+from sprites import *
+from config import *
+from Character.MapLoader import *
+import sys
 
-pygame.init()
-screen = pygame.display.set_mode((1280, 736)) #40x23 casillas a 16 bits
-clock = pygame.time.Clock()
-running = True
-dt = 0
 
-#Carga de sprites
-sprite_width, sprite_height = 32, 32
-sprite_image = pygame.image.load(Assets.character)
-character_image = pygame.image.load(Assets.wall)
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((Config.WIN_WIDTH, Config.WIN_HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.character_spritesheet = Spritesheet("assets/character.png")
+        self.terrain_spritesheet = Spritesheet("assets/terrain.png")
+        self.water_spritesheet = Spritesheet("assets/water_tileset.png")
 
-background_array = [[sprite_image for _ in range(22)] for _ in range(40)]
+    def createTileMap(self):
+        ml = MapLoader()
+        self.bombas = ml.bombas
+        self.diamantes = ml.diamantes
+        self.pociones = ml.pociones
+        self.snorkel = ml.trajes
+        for _ in range(self.bombas):
+            generado = False
+            while not generado:
+                y, x = random.randint(0, 39), random.randint(0, 20)
+                if Config.maptile[x][y] == '.':
+                    generado = True
+                    fila = Config.maptile[x]
+                    nueva_fila = fila[:y] + 'B' + fila[y + 1:]
+                    Config.maptile[x] = nueva_fila
+        for _ in range(self.pociones):
+            generado = False
+            while not generado:
+                y, x = random.randint(0, 39), random.randint(0, 20)
+                if Config.maptile[x][y] == '.':
+                    generado = True
+                    fila = Config.maptile[x]
+                    nueva_fila = fila[:y] + 'C' + fila[y + 1:]
+                    Config.maptile[x] = nueva_fila
+        for _ in range(self.diamantes):
+            generado = False
+            while not generado:
+                y, x = random.randint(0, 39), random.randint(0, 20)
+                if Config.maptile[x][y] == '.':
+                    generado = True
+                    fila = Config.maptile[x]
+                    nueva_fila = fila[:y] + 'D' + fila[y + 1:]
+                    Config.maptile[x] = nueva_fila
+        for _ in range(self.snorkel):
+            generado = False
+            while not generado:
+                y, x = random.randint(0, 39), random.randint(0, 20)
+                if Config.maptile[x][y] == '.':
+                    generado = True
+                    fila = Config.maptile[x]
+                    nueva_fila = fila[:y] + 'T' + fila[y + 1:]
+                    Config.maptile[x] = nueva_fila
 
-player_pos = pygame.Vector2(0, 0)
-player_radius = 16
-cell_size = 32
-delay_time = 200
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        for i, row in enumerate(Config.maptile):
+            for j, column in enumerate(row):
+                Ground(self, j, i)
+                if column == "M":
+                    Block(self, j, i)
+                if column == "P":
+                    Player(self, j, i)
+                if column == "A":
+                    Water(self, j, i)
+                if column == "C":
+                    Pocion(self, j, i)
+                if column == "B":
+                    Bomba(self, j, i)
+                if column == "D":
+                    Diamante(self, j, i)
 
-    screen.fill("white")
-    for col in range(22):
-        for row in range(40):
-            x, y = row * sprite_width, col * sprite_height
-            screen.blit(background_array[row][col], (x, y))
 
-    #pygame.draw.line(color="white", start_pos= (0, 32), end_pos= (0, 720), width= )
 
-    screen.blit(character_image, (player_pos))
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP] and player_pos.y > player_radius * 2:
-        player_pos.y -= 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_DOWN] and player_pos.y < ((screen.get_height()-32) - (player_radius * 2)):
-        player_pos.y += 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_LEFT] and player_pos.x > player_radius * 2:
-        player_pos.x -= 32
-        pygame.time.delay(delay_time)
-    if keys[pygame.K_RIGHT] and player_pos.x < (screen.get_width() - (player_radius * 2)):
-        player_pos.x += 32
-        pygame.time.delay(delay_time)
+    def new(self):
 
-    pygame.display.flip()
+        self.playing = True
 
-    dt = clock.tick(120) / 1000
+        self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.blocks = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.LayeredUpdates()
+
+        self.createTileMap()
+
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+
+    def update(self):
+        self.all_sprites.update()
+
+    def draw(self):
+        self.screen.fill(Config.BLACK)
+
+        self.all_sprites.draw(self.screen)
+        self.clock.tick(Config.FPS)
+        pygame.display.update()
+
+    def main(self):
+        while self.playing:
+            self.events()
+            self.update()
+            self.draw()
+
+        self.running = False
+
+    def game_over(self):
+        pass
+
+    def intro_screen(self):
+        pass
+
+
+g = Game()
+g.intro_screen()
+g.new()
+while g.running:
+    g.main()
+    g.game_over()
 
 pygame.quit()
+sys.exit()
