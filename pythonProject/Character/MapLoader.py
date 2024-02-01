@@ -1,4 +1,8 @@
+import os.path
+
 from config import *
+import random
+from sprites import *
 
 
 class MapLoader:
@@ -7,17 +11,24 @@ class MapLoader:
     pociones = 0
     trajes = 0
     lines = []
+
     def __init__(self):
-        self.route = 'assets/map.txt'
-        with open(self.route, 'r') as map:
-            MapLoader.lines = map.readlines()
+        self.ruta = os.path.join(os.path.dirname(__file__), 'map.txt')
+        with open(self.ruta, 'r') as map:
+            self.lines = map.readlines()
         bombas, diamantes, pociones, trajes = self.lines[0].split(',')
+        self.lines.pop(0)
+        Config.maptile = self.lines
+        self.map = [line.strip() for line in self.lines]
         bombas.split(':')
-        MapLoader.bombas = int(bombas[2])
+        self.bombas = int(bombas[2])
         diamantes.split(':')
-        MapLoader.diamantes = int(diamantes[2])
+        self.diamantes = int(diamantes[2])
         pociones.split(':')
-        MapLoader.pociones = int(pociones[2])
+        self.pociones = int(pociones[2])
         trajes.split(':')
-        MapLoader.trajes = int(trajes[2])
+        self.trajes = int(trajes[2])
+
+
+
 
