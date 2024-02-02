@@ -74,6 +74,8 @@ class Game:
                     Bomba(self, j, i)
                 if column == "D":
                     Diamante(self, j, i)
+                if column == "T":
+                    Snorkel(self, j, i)
 
 
 
