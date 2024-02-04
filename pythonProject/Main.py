@@ -8,7 +8,7 @@ import sys
 
 
 class Game:
-    objetivo = MapLoader.diamantes
+    objetivo = 0
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
@@ -22,7 +22,7 @@ class Game:
     def createTileMap(self):
         ml = MapLoader()
         self.bombas = ml.bombas
-        self.diamantes = ml.diamantes
+        self.diamantes, self.objetivo = ml.diamantes, ml.diamantes
         self.pociones = ml.pociones
         self.snorkel = ml.trajes
         for _ in range(self.bombas):
@@ -134,7 +134,7 @@ class Game:
 
     def main(self):
         while self.playing:
-            if sprites.Player.vida <= 0:
+            if sprites.Player.vida <= 0 or sprites.Player.diamantes == self.objetivoa:
                 pygame.quit()
             self.events()
             self.update()
