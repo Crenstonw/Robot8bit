@@ -1,4 +1,6 @@
 import pygame
+
+import sprites
 from sprites import *
 from config import *
 from Character.MapLoader import *
@@ -6,8 +8,10 @@ import sys
 
 
 class Game:
+    objetivo = MapLoader.diamantes
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((Config.WIN_WIDTH, Config.WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -83,10 +87,13 @@ class Game:
     def new(self):
 
         self.playing = True
-
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates()
-        self.enemies = pygame.sprite.LayeredUpdates()
+        self.water = pygame.sprite.LayeredUpdates()
+        self.item_snorkel = pygame.sprite.LayeredUpdates()
+        self.item_diamante = pygame.sprite.LayeredUpdates()
+        self.item_bomba = pygame.sprite.LayeredUpdates()
+        self.item_pocion = pygame.sprite.LayeredUpdates()
 
         self.createTileMap()
 
@@ -101,13 +108,34 @@ class Game:
 
     def draw(self):
         self.screen.fill(Config.BLACK)
-
         self.all_sprites.draw(self.screen)
         self.clock.tick(Config.FPS)
+        vida_content = f"Vida: {Player.vida}"
+        vida_surface = pygame.font.Font(None, 36).render(vida_content, True, Config.WHITE)
+        vida_rect = vida_surface.get_rect()
+        vida_rect.center = (2 * Config.TILESIZE, 21.5 * Config.TILESIZE)
+        self.screen.blit(vida_surface, vida_rect)
+        bomba_content = f"Bombas: {Player.bombas}"
+        bomba_surface = pygame.font.Font(None, 36).render(bomba_content, True, Config.WHITE)
+        bomba_rect = bomba_surface.get_rect()
+        bomba_rect.center = (6 * Config.TILESIZE, 21.5 * Config.TILESIZE)
+        self.screen.blit(bomba_surface, bomba_rect)
+        diamante_content = f"Diamantes: {Player.diamantes}"
+        diamante_surface = pygame.font.Font(None, 36).render(diamante_content, True, Config.WHITE)
+        diamante_rect = diamante_surface.get_rect()
+        diamante_rect.center = (11.5 * Config.TILESIZE, 21.5 * Config.TILESIZE)
+        self.screen.blit(diamante_surface, diamante_rect)
+        snorkel_content = f"Snorkel: {Player.traje}"
+        snorkel_surface = pygame.font.Font(None, 36).render(snorkel_content, True, Config.WHITE)
+        snorkel_rect = snorkel_surface.get_rect()
+        snorkel_rect.center = (18 * Config.TILESIZE, 21.5 * Config.TILESIZE)
+        self.screen.blit(snorkel_surface, snorkel_rect)
         pygame.display.update()
 
     def main(self):
         while self.playing:
+            if sprites.Player.vida <= 0:
+                pygame.quit()
             self.events()
             self.update()
             self.draw()

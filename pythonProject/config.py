@@ -1,4 +1,16 @@
+import pygame.mixer
+
+
 class Config:
+    pygame.mixer.init()
+    AUCH_SOUND = pygame.mixer.Sound('assets/auch_sound.mp3')
+    EQUIP_SOUND = pygame.mixer.Sound('assets/item-equip.mp3')
+    PICKUP_SOUND = pygame.mixer.Sound('assets/pick_up.mp3')
+    EXPLOSION_SOUND = pygame.mixer.Sound('assets/explosion.mp3')
+    EXPLOSION_SOUND.set_volume(0.5)
+    DRINK_SOUND = pygame.mixer.Sound('assets/drink.mp3')
+    ITEMGRAB_SOUND = pygame.mixer.Sound('assets/grab.mp3')
+    DROWN_SOUND = pygame.mixer.Sound('assets/drown.mp3')
     WIN_WIDTH = 1280
     WIN_HEIGHT = 704
     TILESIZE = 32
@@ -12,6 +24,7 @@ class Config:
 
     RED = (255, 0, 0)
     BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
     BLUE = (0, 0, 255)
 
     maptile = []
