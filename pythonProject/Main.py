@@ -134,7 +134,7 @@ class Game:
 
     def main(self):
         while self.playing:
-            if sprites.Player.vida <= 0 or sprites.Player.diamantes == self.objetivoa:
+            if sprites.Player.vida <= 0 or sprites.Player.diamantes == self.objetivo:
                 pygame.quit()
             self.events()
             self.update()
